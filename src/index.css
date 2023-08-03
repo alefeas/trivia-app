@@ -1,13 +1,64 @@
 body {
+  background-color: rgb(44, 82, 82);
   margin: 0;
+  padding: 1rem;
+  padding: 20px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+.nonClickableButton {
+  cursor: default;
+}
+
+.roulette-button {
+  cursor: pointer;
+  border: 5px solid #ccc;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: +9;
+  border-radius: 5rem;
+  width: 5rem;
+  height: 5rem;
+  transform: translate(-55%, -55%);
+  background: white;
+  color: #000;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}
+
+.text-title {
+  font-size: 1.25rem;
+  color: #5b627d;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+.roulette-container {
+  position: relative;
+  width: 100%;
+  max-width: 550px;
+  aspect-ratio: 1;
+  margin: 0 auto;
+}
+
+.roulette-container > div {
+  width: 100%;
+  height: 100%;
+  max-width: unset;
+  max-height: unset;
 }
