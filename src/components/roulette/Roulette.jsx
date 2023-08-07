@@ -81,11 +81,15 @@ export const Roulette = () => {
 
     const [open, setOpen] = useState(false);
     const [openWildcard, setOpenWildcard] = useState(false);
-    const handleOpen = () => setOpen(true);
+    const handleOpen = () => {
+        setOpen(true)
+        startTimer()
+    }
     const handleOpenWildcard = () => setOpenWildcard(true);
     const handleClose = () => {
         setOpen(false)
         setAnswerColor(false)
+        setTimeOut(false)
     }
     const handleCloseWildcard = () => setOpenWildcard(false);
     
@@ -130,6 +134,7 @@ export const Roulette = () => {
         setAnswerColor(true)
     }
 
+    
     useEffect(() => {
         if (triviaData.length !== 0 ) {
             const options = triviaData.incorrect_answers
@@ -142,11 +147,34 @@ export const Roulette = () => {
         }
     }, [triviaData])
 
+    const [counter, setCounter] = useState(30)
+    const [timeOut, setTimeOut] = useState(false)
+    const startTimer = () => {
+        setTimeout(() => {
+            setCounter(counter - 1)
+        }, 1000);
+    }   
+    useEffect(() => {
+        if(counter===0) {
+            setTimeOut(true)
+            setAnswerColor(true)
+            setCounter(30)
+        } else if(counter===30 || counter === 0 || timeOut || answerColor || !open){
+            setCounter(30)
+        } else {
+            startTimer()
+        }
+    },[counter])
+
+    useEffect(() => {
+        setCounter(30)
+    }, [buttonValue])
+    
     return (
         <div>
 
         <div className='counterContainer'>
-        <span>Counter</span>
+        <h3>Counter</h3>
         <br />
         <span>{playerOneCounter}</span>
         <span> - </span>
@@ -200,6 +228,10 @@ export const Roulette = () => {
             <br />
             <br />
             {
+                answerColor || timeOut ?
+                <></> : <span>Time left: {counter}</span>
+            }
+            {
                 possibleAnswers.map((answer) =>
                     <div>
                         {
@@ -216,11 +248,26 @@ export const Roulette = () => {
                 )
             }
             {
-                answerColor ?
+                !timeOut && answerColor ?
                 <div className='spinAgainButtonContainer'>
+                    {
+                        buttonValue === triviaData.correct_answer ?
+                        <span className='correctMessage'>Correct! Continue spinning</span>
+                        : <span className='incorrectMessage'>Incorrect! Turn of player {player}</span>
+                    }
                     <button className='spinAgainButton' onClick={handleClose}>Spin again!</button>
                 </div>
-                : <></>
+                : 
+                <div>
+                    {
+                        timeOut ?
+                        <div className='spinAgainButtonContainer'>
+                            <span className='incorrectMessage'>Time out! Turn of player {player}</span>
+                            <button className='spinAgainButton' onClick={handleClose}>Spin again!</button>
+                        </div>
+                        : <span></span>
+                    }
+                </div>
             }
             </div>
             </Box>

@@ -25,14 +25,25 @@ button {
 }
 .spinAgainButtonContainer {
     display: flex;
-    justify-content: center;
-    margin-top: 15px;
+    gap: 10px;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
     .spinAgainButton {
         background-color: black;
         color: white;
         border:2px solid white;
         border-radius: 15px;
         width:30%;
+    }
+    span {
+        font-size: 22px;
+    }
+    .incorrectMessage {
+        color: red !important;
+    }
+    .correctMessage {
+        color: green !important;
     }
 }
 .nonClickableButton {
