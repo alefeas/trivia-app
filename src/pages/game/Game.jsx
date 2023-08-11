@@ -5,6 +5,7 @@ import { Wheel } from 'react-custom-roulette';
 import { Loader } from '../../components/loader/Loader.jsx';
 import Modal from '@mui/material/Modal';
 import { ExitArrow } from '../../components/exitArrow/ExitArrow.jsx';
+import { useSessionStorage } from '../../hooks/sessionStorage.jsx';
 
 const style = {
     textAlign: 'center',
@@ -61,8 +62,8 @@ export const Game = () => {
     
     //PLAYERS STATES
     const [player, setPlayer] = useState(1)
-    const [playerOneCounter, setPlayerOneCounter] = useState(0)
-    const [playerTwoCounter, setPlayerTwoCounter] = useState(0)
+    const [playerOneCounter, setPlayerOneCounter] = useSessionStorage('playerOneCounter', 0)
+    const [playerTwoCounter, setPlayerTwoCounter] = useSessionStorage('playerTwoCounter', 0)
     
     //MODAL STATES
     const [open, setOpen] = useState(false);
@@ -122,6 +123,7 @@ export const Game = () => {
     const chooseCategory = (category) => {
         const apiUrl = `https://opentdb.com/api.php?amount=1&category=${category}&type=multiple`;
         apiFunction(apiUrl)
+        handleCloseWildcard()
     }
 
     
@@ -142,6 +144,12 @@ export const Game = () => {
         }
         setAnswerColor(true)
     }
+
+    const playAgain = () => {
+        handleClose()
+        setPlayerOneCounter(0)
+        setPlayerTwoCounter(0)
+    }
     
     //USE EFFECTS
     useEffect(() => {
@@ -151,7 +159,6 @@ export const Game = () => {
             options.sort(() => Math.random() - 0.5)
             setPossibleAnswer(options)
             setLoading(false)
-            handleCloseWildcard()
             handleOpen()
         }
     }, [triviaData])
@@ -166,6 +173,11 @@ export const Game = () => {
             setTimeOut(true)
             setAnswerColor(true)
             setCounter(30)
+            if (player === 1) {
+                setPlayer(2)
+            } else {
+                setPlayer(1)
+            }
         } else if(counter===30 || counter === 0 || timeOut || answerColor || !open){
             setCounter(30)
         } else {
@@ -180,12 +192,13 @@ export const Game = () => {
         <div>
         <ExitArrow/>
         <div className='game'>
+
         <div className='counterContainer'>
-        <span>TURN: PLAYER {player}</span>
+        <span>TURN: P{player}</span>
         <div>
-            <span>{playerOneCounter}</span>
+            <span>(P1) {playerOneCounter}</span>
             <span> - </span>
-            <span>{playerTwoCounter}</span>
+            <span>{playerTwoCounter} (P2)</span>
         </div>
         </div>
         <div align="center" className="roulette-container">
@@ -194,19 +207,19 @@ export const Game = () => {
             spinDuration={[0.4]}
             prizeNumber={prizeNumber}
             data={rouletteData}
-            outerBorderColor={["rgb(28, 40, 78)"]}
-            radiusLineColor={["rgb(28, 40, 78)"]}
+            outerBorderColor={["black"]}
+            radiusLineColor={["black"]}
             radiusLineWidth={[1]}
-            textColors={["#f5f5f5"]}
+            textColors={[""]}
             fontSize={[30]}
             backgroundColors={[
-                "aqua",
                 "lightsalmon",
-                "lightblue",
                 "lightcoral",
+                "lightblue",
+                "lightgray",
                 "lightgreen",
                 "wheat",
-                "pink",
+                "lightpink",
             ]}
             onStopSpinning={() => {
                 if (!rouletteData[prizeNumber].wildcard) {
@@ -216,7 +229,7 @@ export const Game = () => {
                     handleOpenWildcard()
                 }
                 setMustSpin(false);
-                }}
+            }}
             />
             {
                 mustSpin ?
@@ -233,20 +246,27 @@ export const Game = () => {
                 open={open}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
-            >
+                >
                 <Box sx={style}>
-                <div>
+                {
+            playerOneCounter === 7 || playerTwoCounter === 7 ?
+            <div className='congratsContainer'>
+                <span>Congratulations! Player {player} is the winner</span> 
+                <button className='playAgainButton' onClick={playAgain}>PLAY AGAIN</button>
+            </div>
+            :
+
+                <div className='questionContainer'>
                 <h3>{triviaData.category}</h3>
                 <span>{decode(triviaData.question)}</span>
-                <br />
-                <br />
                 {
                     answerColor || timeOut ?
                     <></> : <span>Time left: {counter}</span>
                 }
+                <div>
                 {
                     possibleAnswers.map((answer) =>
-                        <div>
+                    <div>
                             {
                                 !answerColor ?
                                 <button className='answerButton' onClick={() => verifyAnswer(answer)}>
@@ -260,6 +280,7 @@ export const Game = () => {
                         </div>
                     )
                 }
+                </div>
                 {
                     !timeOut && answerColor ?
                     <div className='spinAgainButtonContainer'>
@@ -283,13 +304,14 @@ export const Game = () => {
                     </div>
                 }
                 </div>
+    }
                 </Box>
             </Modal>
             <Modal
                 open={openWildcard}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
-            >
+                >
                 <Box sx={style}>
                     {rouletteData.map(item => 
                         <ul>
@@ -302,11 +324,11 @@ export const Game = () => {
             </Modal>
         </div>
         </div>
-        {
-            loading ?
-            <Loader/> 
-            : <span></span>
-        }
+    {
+        loading ?
+        <Loader/> 
+        : <span></span>
+    }
         </div>
     )
 }
