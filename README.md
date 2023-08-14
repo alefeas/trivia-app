@@ -1,7 +1,7 @@
 # Trivia App 🎡
 
 Trivia App es un juego que consiste en una batalla de trivia entre 2 jugadores. El mismo fue desarrollado con [**React JS**](https://reactjs.org/).   
-<img src="https://firebasestorage.googleapis.com/v0/b/felix-movies-2.appspot.com/o/Captura%20de%20pantalla%20(931).png?alt=media&token=51172c76-ab64-47d4-824e-5844e4fe5620" width="800">
+<img src="./public/coverImageREADME.png" width="800">
 
 ## Tecnologías 🛠️
 
