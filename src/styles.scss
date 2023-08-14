@@ -1,6 +1,5 @@
 @import url(https://fonts.googleapis.com/css?family=Exo:100);
-$yellow: rgb(0, 0, 0);
-$secondaryColor: black;
+$principalColor: rgb(0, 0, 0);
 
 $bg-url: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAABnSURBVHja7M5RDYAwDEXRDgmvEocnlrQS2SwUFST9uEfBGWs9c97nbGtDcquqiKhOImLs/UpuzVzWEi1atGjRokWLFi1atGjRokWLFi1atGjRokWLFi1af7Ukz8xWp8z8AAAA//8DAJ4LoEAAlL1nAAAAAElFTkSuQmCC";
 $bg-width: 50px;
@@ -32,12 +31,21 @@ $bg-height: 50px;
 @keyframes         bg-scrolling {
         0% { background-position: $bg-width $bg-height; }
 }
-
+.container {
+    min-height: 100vh;
+    min-width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+* {
+    scroll-behavior: smooth;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 body {
-    margin-top: 13.5rem;
-    
     text-align: center;
-    /* img size is 50x50 */
     background: url($bg-url) repeat 0 0;
     font-family: exo, ubuntu, "segoe ui", helvetica, arial, sans-serif;
     -webkit-animation: bg-scrolling-reverse .92s infinite; /* Safari 4+ */
@@ -50,51 +58,47 @@ body {
     animation-timing-function:         linear;
     font-weight: bold;
 }
-
+.musicButtonContainer {
+    display: flex;
+    justify-content: end;
+}
 .musicButton {
+    margin:20px;
     cursor: pointer;
     background-color: transparent;
-    position: absolute;
-    bottom: 2%;
-    right: 2%;
     border-radius: 50%;
     padding: 15px;
-    border: $yellow 3px solid;
+    border: $principalColor 3px solid;
     transition: .25s;
-    color: $yellow;
+    color: $principalColor;
     &:hover {
-        background-color: $yellow;
+        background-color: $principalColor;
         color: white;
     }
     .musicIcon {
         font-size: 40px;
     }
 }
-.exitIcon {
-    position: absolute;
-    left: 2%;
-    top: 2%;
-    border-radius: 50%;
-    padding: 15px;
-    border: $yellow 3px solid;
-    font-size: 40px !important;
-    color: $yellow;
-    transition: .25s !important;
-    &:hover {
-        background-color: $yellow;
-        color: white;
+.exitArrowContainer {
+    display: flex;
+    .exitIcon {
+        margin: 20px;
+        border-radius: 50%;
+        padding: 15px;
+        border: $principalColor 3px solid;
+        font-size: 76px !important;
+        color: $principalColor;
+        transition: .25s !important;
+        &:hover {
+            background-color: $principalColor;
+            color: white;
+        }
     }
 }
-
 //HOME 
 .homeContainer { 
-    position: absolute;
-    top: 40%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    display: flex;
-    align-items: center;
-    flex-direction: column;
+    margin: auto;
+    width: 600px;
     .title {
         margin-top: 0;
         margin-bottom: 40px;
@@ -102,7 +106,7 @@ body {
     }
     a {
         text-decoration: none;
-        color: $yellow;
+        color: $principalColor;
         font-size: 30px;
     }
     div {
@@ -111,15 +115,15 @@ body {
         align-items: center;
         gap: 15px;
         a {
-            border: 2px solid $yellow;
+            border: 2px solid $principalColor;
             border-radius: 40px;
             padding: 5px 30px;
             font-family: exo, ubuntu, "segoe ui", helvetica, arial, sans-serif;
-            color: $yellow;
+            color: $principalColor;
             font-size: 26px;
             transition: .25s;
             &:hover {
-                background-color: $yellow;
+                background-color: $principalColor;
                 color: white;
             }
         }
@@ -128,29 +132,37 @@ body {
 
 //HOW TO PLAY
 .howToPlayContainer {
-    width: 100vw;
-    height: 100vh;
+    display: flex;
+    justify-content: center;
     text-align: justify;
     div {
-        color: $yellow;
-        position: absolute;
-        top: 40%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+        color: $principalColor;
     }
     h3 {
         text-align: center;
+        margin: 0;
         font-size: 60px;
     }
     p {
+        margin: 15px;
+        width: 900px;
         font-size: 24px;
     }
     color: lightgray;
 }
 
-
 //GAME
+.modal {
+    overflow-y: auto;
+}
+.boxModal {
+    max-height: 95% !important;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
 .questionContainer {
+    width: 600px;
     display: flex; 
     flex-direction: column;
     gap: 15px;
@@ -190,8 +202,11 @@ ul {
     transition: .25s;
 }
 .MuiBackdrop-root {
+    min-width: none !important;
     transition: 0ms !important;
     background-color: rgba(0, 0, 0, 0.95) !important;
+    height: 200vh;
+    width: 200vw;
 }
 .answerButton {
     font-family: exo, ubuntu, "segoe ui", helvetica, arial, sans-serif;
@@ -220,7 +235,7 @@ ul {
         color: white;
         border:2px solid white;
         border-radius: 40px;
-        width:30%;
+        width:200px;
     }
     span {
         font-size: 22px;
@@ -237,6 +252,7 @@ ul {
 }
 
 .roulette-container {
+    width: 550px;
     position: relative;
     aspect-ratio: 1;
     margin: 0 auto;
@@ -267,23 +283,19 @@ ul {
     height: 5.5rem;
     transform: translate(-55%, -55%);
     background: white;
-    border:2px solid $yellow;
+    border:2px solid $principalColor;
     font-size:18px;
     font-weight: bold;
     transition: .25s;
     &:hover {
-        background-color: $yellow;
+        background-color: $principalColor;
         color: black;
         color: white;
     }
 }
 
 .game {
-    position: absolute;
-    width: 550px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
+    margin: auto;
     text-align: center;
 }
 
@@ -293,7 +305,6 @@ ul {
     max-width: unset;
     max-height: unset;
 }
-
 
 //LOADER
 .loaderContainer {
@@ -326,5 +337,40 @@ ul {
     }
     100% {
     background-position: 32px 0px, 48px 16px;
+    }
+}
+
+//RESPONSIVE WEB DESIGN
+@media screen and (max-width: 1000px) {
+    .howToPlayContainer {
+        h3 {
+            font-size: 50px;
+            margin: 20px 0;
+        }
+        p {
+            font-size: 20px;
+            width: 90vw;
+        }
+    }
+}
+@media screen and (max-width: 800px) {
+    .roulette-container {
+        width: 70vw;
+    }
+    .questionContainer {
+        width: 90vw;
+        h3 {
+            font-size: 30px !important;
+        }
+        span {
+            font-size: 24px !important;
+        }
+    }
+    .roulette-button {
+        width:80px;
+        height: 80px;
+    }
+    .homeContainer{
+        width: 90vw;
     }
 }

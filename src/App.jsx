@@ -6,8 +6,10 @@ import '../src/styles.scss'
 function App() {
   return (
       <BrowserRouter>
-        <AppRoutes/>
-        <MusicButton/>
+        <div className="container">
+          <AppRoutes/>
+          <MusicButton/>
+        </div>
       </BrowserRouter>
   );
 }

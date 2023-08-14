@@ -19,7 +19,7 @@ export const MusicButton = () => {
     }
 
     return (
-        <div>
+        <div className='musicButtonContainer'>
             <button className='musicButton' onClick={() => playStopMusic()}>{!muteMusic ? <MusicNoteIcon className='musicIcon' /> : <MusicOffIcon className='musicIcon' />}</button>
         </div>
     )

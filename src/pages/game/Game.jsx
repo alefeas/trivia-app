@@ -13,7 +13,6 @@ const style = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 600,
     color: 'white',
     fontSize: '30px'
 };
@@ -38,10 +37,7 @@ export const Game = () => {
         category: 19,
         categoryTitle: 'Maths'
         },
-        {
-        option: '👑',
-        wildcard: true,
-        },
+        
         {
         option: '🎬',
         category: 11,
@@ -56,9 +52,12 @@ export const Game = () => {
         option: '🌎',
         category: 22,
         categoryTitle: 'Geography'
+        },
+        {
+            option: '👑',
+            wildcard: true,
         }
     ]
-    
     
     //PLAYERS STATES
     const [player, setPlayer] = useState(1)
@@ -189,146 +188,150 @@ export const Game = () => {
         setCounter(30)
     }, [buttonValue])
     return (
-        <div>
-        <ExitArrow/>
-        <div className='game'>
+        <>
+            <ExitArrow/>
+            <div>
+            <div className='game'>
 
-        <div className='counterContainer'>
-        <span>TURN: P{player}</span>
-        <div>
-            <span>(P1) {playerOneCounter}</span>
-            <span> - </span>
-            <span>{playerTwoCounter} (P2)</span>
-        </div>
-        </div>
-        <div align="center" className="roulette-container">
-        <Wheel
-            mustStartSpinning={mustSpin}
-            spinDuration={[0.4]}
-            prizeNumber={prizeNumber}
-            data={rouletteData}
-            outerBorderColor={["black"]}
-            radiusLineColor={["black"]}
-            radiusLineWidth={[1]}
-            textColors={[""]}
-            fontSize={[30]}
-            backgroundColors={[
-                "lightsalmon",
-                "lightcoral",
-                "lightblue",
-                "lightgray",
-                "lightgreen",
-                "wheat",
-                "lightpink",
-            ]}
-            onStopSpinning={() => {
-                if (!rouletteData[prizeNumber].wildcard) {
-                    const apiUrl = `https://opentdb.com/api.php?amount=1&category=${rouletteData[prizeNumber].category}&type=multiple`;
-                    apiFunction(apiUrl)
-                } else {
-                    handleOpenWildcard()
-                }
-                setMustSpin(false);
-            }}
-            />
-            {
-                mustSpin ?
-                <button className="nonClickableButton roulette-button">
-                SPIN!
-                </button>
-            :
-            <button className="roulette-button button" onClick={handleSpinClick}>
-                SPIN!
-                </button>
-            }
-        <Modal
-                sx={modalStyle}
-                open={open}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-                >
-                <Box sx={style}>
-                {
-            playerOneCounter === 7 || playerTwoCounter === 7 ?
-            <div className='congratsContainer'>
-                <span>Congratulations! Player {player} is the winner</span> 
-                <button className='playAgainButton' onClick={playAgain}>PLAY AGAIN</button>
+            <div className='counterContainer'>
+            <span>TURN: P{player}</span>
+            <div>
+                <span>(P1) {playerOneCounter}</span>
+                <span> - </span>
+                <span>{playerTwoCounter} (P2)</span>
             </div>
-            :
-
-                <div className='questionContainer'>
-                <h3>{triviaData.category}</h3>
-                <span>{decode(triviaData.question)}</span>
+            </div>
+            <div align="center" className="roulette-container">
+            <Wheel
+                mustStartSpinning={mustSpin}
+                spinDuration={[0.4]}
+                prizeNumber={prizeNumber}
+                data={rouletteData}
+                outerBorderColor={["black"]}
+                radiusLineColor={["black"]}
+                radiusLineWidth={[1]}
+                textColors={[""]}
+                fontSize={[30]}
+                backgroundColors={[
+                    "lightsalmon",
+                    "lightcoral",
+                    "lightblue",
+                    "lightgray",
+                    "lightgreen",
+                    "wheat",
+                    "lightpink",
+                ]}
+                onStopSpinning={() => {
+                    if (!rouletteData[prizeNumber].wildcard) {
+                        const apiUrl = `https://opentdb.com/api.php?amount=1&category=${rouletteData[prizeNumber].category}&type=multiple`;
+                        apiFunction(apiUrl)
+                    } else {
+                        handleOpenWildcard()
+                    }
+                    setMustSpin(false);
+                }}
+                />
                 {
-                    answerColor || timeOut ?
-                    <></> : <span>Time left: {counter}</span>
+                    mustSpin ?
+                    <button className="nonClickableButton roulette-button">
+                    SPIN!
+                    </button>
+                :
+                <button className="roulette-button button" onClick={handleSpinClick}>
+                    SPIN!
+                    </button>
                 }
-                <div>
-                {
-                    possibleAnswers.map((answer) =>
+            <Modal
+                    className='modal'
+                    sx={modalStyle}
+                    open={open}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                    >
+                    <Box className='boxModal' sx={style}>
+                    {
+                playerOneCounter === 7 || playerTwoCounter === 7 ?
+                <div className='congratsContainer'>
+                    <span>Congratulations! Player {player} is the winner</span> 
+                    <button className='playAgainButton' onClick={playAgain}>PLAY AGAIN</button>
+                </div>
+                :
+
+                    <div className='questionContainer'>
+                    <h3>{triviaData.category}</h3>
+                    <span>{decode(triviaData.question)}</span>
+                    {
+                        answerColor || timeOut ?
+                        <></> : <span>Time left: {counter}</span>
+                    }
                     <div>
+                    {
+                        possibleAnswers.map((answer) =>
+                        <div>
+                                {
+                                    !answerColor ?
+                                    <button className='answerButton' onClick={() => verifyAnswer(answer)}>
+                                        {decode(answer)}
+                                    </button>
+                                    : 
+                                    <button value={answer} className={triviaData.correct_answer === answer ? 'nonClickableButton correctAnswer answerButton' : 'nonClickableButton answerButton'} id={triviaData.correct_answer !== answer && buttonValue === answer ? 'incorrectAnswer' : ''}>
+                                        {decode(answer)}
+                                    </button>
+                                }
+                            </div>
+                        )
+                    }
+                    </div>
+                    {
+                        !timeOut && answerColor ?
+                        <div className='spinAgainButtonContainer'>
                             {
-                                !answerColor ?
-                                <button className='answerButton' onClick={() => verifyAnswer(answer)}>
-                                    {decode(answer)}
-                                </button>
-                                : 
-                                <button value={answer} className={triviaData.correct_answer === answer ? 'nonClickableButton correctAnswer answerButton' : 'nonClickableButton answerButton'} id={triviaData.correct_answer !== answer && buttonValue === answer ? 'incorrectAnswer' : ''}>
-                                    {decode(answer)}
-                                </button>
+                                buttonValue === triviaData.correct_answer ?
+                                <span className='correctMessage'>Correct! Continue spinning</span>
+                                : <span className='incorrectMessage'>Incorrect! Turn of player {player}</span>
+                            }
+                            <button className='spinAgainButton answerButton' onClick={handleClose}>Spin again!</button>
+                        </div>
+                        : 
+                        <div>
+                            {
+                                timeOut ?
+                                <div className='spinAgainButtonContainer'>
+                                    <span className='incorrectMessage'>Time out! Turn of player {player}</span>
+                                    <button className='spinAgainButton answerButton' onClick={handleClose}>Spin again!</button>
+                                </div>
+                                : <span></span>
                             }
                         </div>
-                    )
-                }
-                </div>
-                {
-                    !timeOut && answerColor ?
-                    <div className='spinAgainButtonContainer'>
-                        {
-                            buttonValue === triviaData.correct_answer ?
-                            <span className='correctMessage'>Correct! Continue spinning</span>
-                            : <span className='incorrectMessage'>Incorrect! Turn of player {player}</span>
-                        }
-                        <button className='spinAgainButton answerButton' onClick={handleClose}>Spin again!</button>
+                    }
                     </div>
-                    : 
-                    <div>
-                        {
-                            timeOut ?
-                            <div className='spinAgainButtonContainer'>
-                                <span className='incorrectMessage'>Time out! Turn of player {player}</span>
-                                <button className='spinAgainButton answerButton' onClick={handleClose}>Spin again!</button>
-                            </div>
-                            : <span></span>
-                        }
-                    </div>
-                }
-                </div>
-    }
-                </Box>
-            </Modal>
-            <Modal
-                open={openWildcard}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-                >
-                <Box sx={style}>
-                    {rouletteData.map(item => 
-                        <ul>
-                            {
-                                <span className='category' value={item.category} onClick={() => chooseCategory(item.category)}>{item.categoryTitle}</span>
-                            }
-                        </ul>
-                    )}
-                </Box>
-            </Modal>
-        </div>
-        </div>
-    {
-        loading ?
-        <Loader/> 
-        : <span></span>
-    }
-        </div>
+        }
+                    </Box>
+                </Modal>
+                <Modal
+                    className='modal'
+                    open={openWildcard}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                    >
+                    <Box className='boxModal' sx={style}>
+                        {rouletteData.map(item => 
+                            <ul>
+                                {
+                                    <span className='category' value={item.category} onClick={() => chooseCategory(item.category)}>{item.categoryTitle}</span>
+                                }
+                            </ul>
+                        )}
+                    </Box>
+                </Modal>
+            </div>
+            </div>
+            {
+                loading ?
+                <Loader/> 
+                : <span></span>
+            }
+            </div>
+    </>
     )
 }
